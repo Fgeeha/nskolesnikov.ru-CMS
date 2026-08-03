@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="wrap section">
+    <header class="page-head">
+      <h1>{% trans "Проекты" %}</h1>
+      <p class="page-head__lead">{% trans "Открытые разработки: backend, AI/ML, DevOps и инструменты." %}</p>
+    </header>
+
+    {% if categories %}
+      <nav class="filters" aria-label="{% trans 'Фильтр по категориям' %}">
+        <a class="filters__item{% if not active_category %} is-active{% endif %}"
+           href="{% url 'portfolio:project-list' %}">{% trans "Все" %}</a>
+        {% for category in categories %}
+          <a class="filters__item{% if active_category.pk == category.pk %} is-active{% endif %}"
+             href="{% querystring category=category.slug page=None %}">{{ category.name }}</a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+
+    <div class="grid grid--cards">
+      {% for project in projects %}
+        {% include "includes/project_card.html" %}
+      {% empty %}
+        <p class="muted">{% trans "По этому запросу проектов нет." %}</p>
+      {% endfor %}
+    </div>
+
+    {% include "includes/pagination.html" %}
+  </div>
+{% endblock %}

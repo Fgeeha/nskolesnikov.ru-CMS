@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="wrap section">
+    <header class="page-head">
+      <h1>{% trans "Мини-проекты" %}</h1>
+      <p class="page-head__lead">{% trans "Небольшие браузерные инструменты и эксперименты." %}</p>
+    </header>
+
+    <ul class="grid grid--tools">
+      {% for tool in mini_projects %}
+        <li>
+          <a class="tool-card" href="{{ tool.url }}" rel="noopener noreferrer" target="_blank">
+            <span class="tool-card__title">{{ tool.title }}</span>
+            <span class="tool-card__summary muted">{{ tool.summary }}</span>
+            {% if tool.category %}<span class="tool-card__tag">{{ tool.category.name }}</span>{% endif %}
+          </a>
+        </li>
+      {% empty %}
+        <li class="muted">{% trans "Мини-проекты пока не добавлены." %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

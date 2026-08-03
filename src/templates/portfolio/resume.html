@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="wrap section">
+    <header class="page-head">
+      <h1>{% trans "Опыт и образование" %}</h1>
+      {% if profile.resume_url %}
+        <p class="page-head__actions">
+          <a class="btn btn--ghost" href="{{ profile.resume_url }}" rel="noopener noreferrer" target="_blank">
+            {% trans "Скачать резюме" %}
+          </a>
+        </p>
+      {% endif %}
+    </header>
+
+    <section class="section">
+      <h2 class="section__title">{% trans "Опыт работы" %}</h2>
+      <ol class="timeline">
+        {% for item in experiences %}
+          <li class="timeline__item">
+            <div class="timeline__period muted">
+              <time datetime="{{ item.started_on|date:'Y-m' }}">{{ item.started_on|date:"m.Y" }}</time> —
+              {% if item.is_current %}{% trans "настоящее время" %}
+              {% else %}<time datetime="{{ item.finished_on|date:'Y-m' }}">{{ item.finished_on|date:"m.Y" }}</time>{% endif %}
+            </div>
+            <h3 class="timeline__title">{{ item.position }}</h3>
+            <p class="timeline__org">
+              {% if item.organization_url %}
+                <a href="{{ item.organization_url }}" rel="noopener noreferrer" target="_blank">{{ item.organization }}</a>
+              {% else %}{{ item.organization }}{% endif %}
+            </p>
+            {% if item.description %}<div class="timeline__text prose">{{ item.description|linebreaks }}</div>{% endif %}
+            {% if item.technologies.all %}
+              <ul class="tag-list tag-list--compact">
+                {% for tech in item.technologies.all %}<li class="tag">{{ tech.name }}</li>{% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% empty %}
+          <li class="muted">{% trans "Записи об опыте пока не добавлены." %}</li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title">{% trans "Образование" %}</h2>
+      <ol class="timeline">
+        {% for item in educations %}
+          <li class="timeline__item">
+            <div class="timeline__period muted">
+              <time datetime="{{ item.started_on|date:'Y' }}">{{ item.started_on|date:"Y" }}</time> —
+              {% if item.finished_on %}<time datetime="{{ item.finished_on|date:'Y' }}">{{ item.finished_on|date:"Y" }}</time>
+              {% else %}{% trans "настоящее время" %}{% endif %}
+            </div>
+            <h3 class="timeline__title">{{ item.program }}</h3>
+            <p class="timeline__org">{{ item.institution }}{% if item.degree %} · {{ item.degree }}{% endif %}</p>
+            {% if item.description %}<div class="timeline__text prose">{{ item.description|linebreaks }}</div>{% endif %}
+          </li>
+        {% empty %}
+          <li class="muted">{% trans "Записи об образовании пока не добавлены." %}</li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    {% if certificates %}
+      <section class="section">
+        <h2 class="section__title">{% trans "Сертификаты" %}</h2>
+        <ul class="plain-list">
+          {% for cert in certificates %}
+            <li>
+              {% if cert.url %}<a href="{{ cert.url }}" rel="noopener noreferrer" target="_blank">{{ cert.title }}</a>
+              {% else %}{{ cert.title }}{% endif %}
+              <span class="muted">— {{ cert.issuer }}, {{ cert.issued_on|date:"Y" }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+  </div>
+{% endblock %}

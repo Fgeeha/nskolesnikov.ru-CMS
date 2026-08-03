@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="wrap section">
+    <header class="page-head">
+      <h1>{% trans "Контакты" %}</h1>
+      <p class="page-head__lead">{% trans "Напишите — отвечу в течение пары дней." %}</p>
+    </header>
+
+    <div class="contact">
+      <div class="contact__info">
+        {% if profile.public_email %}
+          <p class="contact__email"><a href="mailto:{{ profile.public_email }}">{{ profile.public_email }}</a></p>
+        {% endif %}
+        {% if social_links %}
+          <ul class="social social--cards">
+            {% for link in social_links %}
+              <li>
+                <a class="social__link" href="{{ link.url }}" rel="me noopener noreferrer" target="_blank">
+                  <span class="social__name">{{ link.name }}</span>
+                  {% if link.username %}<span class="social__username muted">{{ link.username }}</span>{% endif %}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="contact__form">
+        {% include "includes/contact_form.html" %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

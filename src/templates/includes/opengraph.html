@@ -1,0 +1,15 @@
+{% load seo_tags %}
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:site_name" content="{{ site_settings.site_name }}">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="{% page_title %}">
+<meta property="og:description" content="{% page_description %}">
+<meta property="og:url" content="{% canonical_url %}">
+{% if og_image %}
+  <meta property="og:image" content="{% absolute_url og_image %}">
+{% elif site_settings.default_og_image %}
+  <meta property="og:image" content="{% absolute_url site_settings.default_og_image.url %}">
+{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% page_title %}">
+<meta name="twitter:description" content="{% page_description %}">

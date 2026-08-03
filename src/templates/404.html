@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Страница не найдена" %} — 404{% endblock %}
+{% block meta_description %}{% trans "Запрошенная страница не найдена." %}{% endblock %}
+
+{% block content %}
+  <div class="wrap section error-page">
+    <p class="error-page__code" aria-hidden="true">404</p>
+    <h1>{% trans "Страница не найдена" %}</h1>
+    <p class="muted">{% trans "Адрес устарел или содержит опечатку." %}</p>
+    <p class="page-head__actions">
+      <a class="btn btn--primary" href="/">{% trans "На главную" %}</a>
+      <a class="btn btn--ghost" href="{% url 'portfolio:project-list' %}">{% trans "К проектам" %}</a>
+    </p>
+  </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n seo_tags %}
+
+{% block content %}
+  <article class="wrap section article">
+    <nav class="breadcrumbs" aria-label="{% trans 'Хлебные крошки' %}">
+      <a href="{% url 'blog:article-list' %}">{% trans "Статьи" %}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{{ article.title }}</span>
+    </nav>
+
+    <header class="page-head">
+      <div class="card__meta muted">
+        <time datetime="{{ article.published_at|date:'c' }}">{{ article.published_at|date:"d.m.Y" }}</time>
+        <span>·</span>
+        <span>{{ article.estimated_reading_time }} {% trans "мин чтения" %}</span>
+        {% if article.category %}
+          <span>·</span><a href="{{ article.category.get_absolute_url }}">{{ article.category.name }}</a>
+        {% endif %}
+      </div>
+      <h1>{{ article.title }}</h1>
+      <p class="page-head__lead">{{ article.excerpt }}</p>
+    </header>
+
+    {% if article.cover %}
+      <figure class="figure">
+        <img src="{{ article.cover.url }}" alt="{{ article.cover_alt|default:article.title }}"
+             width="1200" height="630" loading="lazy" decoding="async">
+      </figure>
+    {% endif %}
+
+    <div class="prose">{{ article.body|linebreaks }}</div>
+
+    {% if article.tags.all %}
+      <ul class="tag-list tag-list--compact">
+        {% for tag in article.tags.all %}
+          <li><a class="tag tag--link" href="{{ tag.get_absolute_url }}">#{{ tag.name }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </article>
+
+  {% if related_articles %}
+    <div class="wrap section">
+      <h2 class="section__title">{% trans "Читайте также" %}</h2>
+      <div class="grid grid--cards">
+        {% for article in related_articles %}{% include "includes/article_card.html" %}{% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block opengraph %}
+  {{ block.super }}
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="{{ article.published_at|date:'c' }}">
+{% endblock %}
+
+{% block structured_data %}
+  {{ block.super }}
+  {% schema_article article as article_schema %}
+  <script type="application/ld+json">{{ article_schema }}</script>
+{% endblock %}

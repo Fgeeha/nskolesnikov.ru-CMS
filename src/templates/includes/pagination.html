@@ -1,0 +1,17 @@
+{% load i18n %}
+{% if page_obj.paginator.num_pages > 1 %}
+  <nav class="pagination" aria-label="{% trans 'Постраничная навигация' %}">
+    {% if page_obj.has_previous %}
+      {# Django's querystring tag keeps active filters when changing page. #}
+      <a class="pagination__link" rel="prev"
+         href="{% querystring page=page_obj.previous_page_number %}">{% trans "Назад" %}</a>
+    {% endif %}
+    <span class="pagination__status muted">
+      {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Страница {{ current }} из {{ total }}{% endblocktrans %}
+    </span>
+    {% if page_obj.has_next %}
+      <a class="pagination__link" rel="next"
+         href="{% querystring page=page_obj.next_page_number %}">{% trans "Вперёд" %}</a>
+    {% endif %}
+  </nav>
+{% endif %}

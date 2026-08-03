@@ -1,0 +1,60 @@
+{% load i18n static sekizai_tags cms_tags seo_tags %}<!doctype html>
+<html lang="{{ LANGUAGE_CODE|default:'ru' }}" data-theme-default="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% page_title %}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{% page_description %}{% endblock %}">
+  <link rel="canonical" href="{% block canonical %}{% canonical_url %}{% endblock %}">
+
+  {% block opengraph %}{% include "includes/opengraph.html" %}{% endblock %}
+
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="manifest" href="{% static 'site.webmanifest' %}">
+  <meta name="theme-color" content="#0b0f14">
+  {% if site_settings.yandex_verification %}<meta name="yandex-verification" content="{{ site_settings.yandex_verification }}">{% endif %}
+  {% if site_settings.google_verification %}<meta name="google-site-verification" content="{{ site_settings.google_verification }}">{% endif %}
+
+  {# Applied before first paint so the page never flashes the wrong theme. #}
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_head %}{% endblock %}
+  {% render_block "css" %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main">{% trans "Перейти к содержимому" %}</a>
+  {% cms_toolbar %}
+
+  {% include "includes/header.html" %}
+
+  <main id="main" class="site-main">
+    {% if messages %}
+      <div class="wrap messages" role="status">
+        {% for message in messages %}
+          <p class="message message--{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "includes/footer.html" %}
+
+  {% block structured_data %}{% include "includes/schema_person.html" %}{% endblock %}
+
+  <script src="{% static 'js/main.js' %}" defer></script>
+  {% block extra_js %}{% endblock %}
+  {% render_block "js" %}
+</body>
+</html>
