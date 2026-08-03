@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load cms_tags %}
+
+{% comment %}
+Home page composition lives entirely in placeholders: editors rearrange
+sections in the CMS toolbar without touching Python or templates.
+{% endcomment %}
+
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+  <div class="placeholder-hero">{% placeholder "hero" %}</div>
+  <div class="placeholder-sections">{% placeholder "sections" %}</div>
+  <div class="placeholder-closing">{% placeholder "closing" %}</div>
+{% endblock %}

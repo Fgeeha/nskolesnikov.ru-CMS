@@ -1,0 +1,25 @@
+{% load i18n %}
+<section class="section section--tools"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <ul class="grid grid--tools">
+      {% for tool in mini_projects %}
+        <li>
+          <a class="tool-card" href="{{ tool.url }}" rel="noopener noreferrer" target="_blank">
+            <span class="tool-card__title">{{ tool.title }}</span>
+            <span class="tool-card__summary muted">{{ tool.summary }}</span>
+          </a>
+        </li>
+      {% empty %}
+        <li class="muted">{% trans "Мини-проекты пока не добавлены." %}</li>
+      {% endfor %}
+    </ul>
+
+    {% if instance.show_all_link %}
+      <p class="section__more">
+        <a class="link-arrow" href="{% url 'portfolio:mini-project-list' %}">{% trans "Все мини-проекты" %}</a>
+      </p>
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,20 @@
+{% load i18n %}
+<section class="section section--articles"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <div class="grid grid--cards">
+      {% for article in articles %}
+        {% include "includes/article_card.html" %}
+      {% empty %}
+        <p class="muted">{% trans "Статей пока нет." %}</p>
+      {% endfor %}
+    </div>
+
+    {% if instance.show_all_link %}
+      <p class="section__more">
+        <a class="link-arrow" href="{% url 'blog:article-list' %}">{% trans "Все статьи" %}</a>
+      </p>
+    {% endif %}
+  </div>
+</section>

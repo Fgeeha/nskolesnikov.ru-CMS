@@ -1,0 +1,43 @@
+{% load i18n %}
+<section class="hero">
+  <div class="wrap hero__inner">
+    <div class="hero__text">
+      {% if profile.is_available %}
+        <p class="badge badge--live">
+          <span class="badge__dot" aria-hidden="true"></span>
+          {{ profile.availability_note|default:_("Открыт к предложениям") }}
+        </p>
+      {% endif %}
+
+      <h1 class="hero__title">{{ title }}</h1>
+      {% if subtitle %}<p class="hero__subtitle">{{ subtitle }}</p>{% endif %}
+      {% if intro %}<p class="hero__intro">{{ intro }}</p>{% endif %}
+
+      <div class="hero__actions">
+        {% if instance.primary_label and instance.primary_url %}
+          <a class="btn btn--primary" href="{{ instance.primary_url }}">{{ instance.primary_label }}</a>
+        {% endif %}
+        {% if instance.secondary_label and instance.secondary_url %}
+          <a class="btn btn--ghost" href="{{ instance.secondary_url }}">{{ instance.secondary_label }}</a>
+        {% endif %}
+      </div>
+
+      {% if profile.location %}
+        <p class="hero__meta muted">{{ profile.location }}</p>
+      {% endif %}
+    </div>
+
+    {% if instance.show_terminal %}
+      <div class="terminal" aria-hidden="true">
+        <div class="terminal__bar">
+          <span class="terminal__dot"></span><span class="terminal__dot"></span><span class="terminal__dot"></span>
+          <span class="terminal__title">zsh</span>
+        </div>
+        <pre class="terminal__body"><span class="terminal__prompt">$</span> {{ instance.terminal_command }}
+{{ profile.nickname|default:profile.full_name }}
+<span class="terminal__prompt">$</span> cat stack.txt
+{{ subtitle }}</pre>
+      </div>
+    {% endif %}
+  </div>
+</section>

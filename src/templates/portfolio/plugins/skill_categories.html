@@ -1,0 +1,21 @@
+{% load i18n %}
+<section class="section section--skills"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <div class="skill-groups">
+      {% for category in categories %}
+        <article class="skill-group">
+          <h3 class="skill-group__title">{{ category.name }}</h3>
+          <ul class="tag-list">
+            {% for skill in category.skills.all %}
+              <li class="tag">{{ skill.name }}</li>
+            {% empty %}
+              <li class="muted">{% trans "Пока пусто" %}</li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

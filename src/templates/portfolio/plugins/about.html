@@ -1,0 +1,33 @@
+{% load i18n %}
+<section class="section section--about"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <div class="about">
+      {% if instance.show_avatar and profile.avatar %}
+        <figure class="about__figure">
+          <img src="{{ profile.avatar.url }}" alt="{{ profile.full_name }}"
+               width="320" height="320" loading="lazy" decoding="async">
+        </figure>
+      {% endif %}
+
+      <div class="about__body prose">
+        {{ body|linebreaks }}
+      </div>
+
+      {% if instance.show_facts %}
+        <dl class="about__facts">
+          {% if profile.location %}
+            <div><dt>{% trans "Локация" %}</dt><dd>{{ profile.location }}</dd></div>
+          {% endif %}
+          {% if profile.public_email %}
+            <div><dt>Email</dt><dd><a href="mailto:{{ profile.public_email }}">{{ profile.public_email }}</a></dd></div>
+          {% endif %}
+          {% if profile.resume_url %}
+            <div><dt>{% trans "Резюме" %}</dt><dd><a href="{{ profile.resume_url }}" rel="noopener noreferrer" target="_blank">{% trans "Скачать" %}</a></dd></div>
+          {% endif %}
+        </dl>
+      {% endif %}
+    </div>
+  </div>
+</section>
