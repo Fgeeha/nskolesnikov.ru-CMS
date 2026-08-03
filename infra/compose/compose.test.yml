@@ -1,0 +1,29 @@
+name: nskolesnikov-test
+
+# Одноразовый PostgreSQL для тестов. Порт отличается от development-стека,
+# поэтому оба могут работать одновременно. Данные лежат в tmpfs: они не нужны
+# после прогона, зато тесты идут заметно быстрее.
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${TEST_POSTGRES_DB:-portfolio}
+      POSTGRES_USER: ${TEST_POSTGRES_USER:-portfolio}
+      POSTGRES_PASSWORD: ${TEST_POSTGRES_PASSWORD:-portfolio}
+      # Ускорение за счёт долговечности — допустимо только для тестов.
+      POSTGRES_INITDB_ARGS: "--nosync"
+    command: >
+      postgres
+      -c fsync=off
+      -c synchronous_commit=off
+      -c full_page_writes=off
+    tmpfs:
+      - /var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:${TEST_POSTGRES_PORT:-55432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TEST_POSTGRES_USER:-portfolio} -d ${TEST_POSTGRES_DB:-portfolio}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20

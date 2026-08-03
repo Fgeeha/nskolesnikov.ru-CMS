@@ -1,0 +1,51 @@
+name: nskolesnikov-dev
+
+# Единственный источник настроек — `.env` в корне репозитория. Блок
+# `environment` содержит только то, что обязано отличаться внутри контейнера:
+# значения из `environment` всегда перекрывают `env_file`, поэтому дублировать
+# в нём переменные из `.env` нельзя — иначе правки в `.env` молча игнорируются.
+
+services:
+  db:
+    image: postgres:17-alpine
+    env_file:
+      - ../../.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      # Открыт локально, чтобы psql и другие инструменты видели базу.
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      # $$ — экранирование для Compose: переменные берутся из окружения
+      # контейнера, а не подставляются на этапе разбора файла.
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: ../..
+      dockerfile: infra/docker/app/Dockerfile
+      target: development
+    env_file:
+      - ../../.env
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DJANGO_MEDIA_ROOT: /app/media
+      # Внутри сети Compose база всегда доступна по имени сервиса.
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    volumes:
+      # Живая перезагрузка исходников; media переживает пересборку контейнера.
+      - ../../src:/app/src
+      - media_data:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  media_data:
