@@ -1,0 +1,21 @@
+{% load i18n %}
+<section class="section section--social"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <ul class="social social--{{ instance.style }}">
+      {% for link in links %}
+        <li>
+          <a class="social__link" href="{{ link.url }}" rel="me noopener noreferrer" target="_blank">
+            <span class="social__name">{{ link.name }}</span>
+            {% if instance.style == "cards" and link.username %}
+              <span class="social__username muted">{{ link.username }}</span>
+            {% endif %}
+          </a>
+        </li>
+      {% empty %}
+        <li class="muted">{% trans "Ссылки пока не добавлены." %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

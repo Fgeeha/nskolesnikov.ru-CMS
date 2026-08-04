@@ -1,0 +1,19 @@
+{% load i18n %}
+<article class="card card--article">
+  {% if article.cover %}
+    <a class="card__media" href="{{ article.get_absolute_url }}" tabindex="-1" aria-hidden="true">
+      <img src="{{ article.cover.url }}" alt="{{ article.cover_alt|default:article.title }}"
+           width="640" height="360" loading="lazy" decoding="async">
+    </a>
+  {% endif %}
+  <div class="card__body">
+    <div class="card__meta muted">
+      <time datetime="{{ article.published_at|date:'c' }}">{{ article.published_at|date:"d.m.Y" }}</time>
+      <span>·</span>
+      <span>{{ article.estimated_reading_time }} {% trans "мин" %}</span>
+      {% if article.category %}<span>·</span><a href="{{ article.category.get_absolute_url }}">{{ article.category.name }}</a>{% endif %}
+    </div>
+    <h3 class="card__title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h3>
+    <p class="card__summary">{{ article.excerpt }}</p>
+  </div>
+</article>

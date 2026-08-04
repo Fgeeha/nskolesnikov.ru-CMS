@@ -1,0 +1,31 @@
+{% load i18n %}
+<form class="form" method="post" action="{% url 'contact:contact' %}" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="form__errors" role="alert">
+      {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+    </div>
+  {% endif %}
+
+  {% for field in form.visible_fields %}
+    {% if field.name != "website" %}
+      <div class="form__row{% if field.errors %} form__row--invalid{% endif %}">
+        <label class="form__label" for="{{ field.id_for_label }}">
+          {{ field.label }}{% if field.field.required %}<span aria-hidden="true"> *</span>{% endif %}
+        </label>
+        {{ field }}
+        {% if field.help_text %}<p class="form__help" id="{{ field.id_for_label }}-help">{{ field.help_text }}</p>{% endif %}
+        {% for error in field.errors %}<p class="form__error" role="alert">{{ error }}</p>{% endfor %}
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {# Honeypot: hidden from users and assistive technology, visible to bots. #}
+  <div class="form__honeypot" aria-hidden="true">
+    <label for="{{ form.website.id_for_label }}">{% trans "Не заполняйте это поле" %}</label>
+    {{ form.website }}
+  </div>
+
+  <button class="btn btn--primary" type="submit">{% trans "Отправить" %}</button>
+</form>

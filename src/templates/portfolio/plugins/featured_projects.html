@@ -1,0 +1,20 @@
+{% load i18n %}
+<section class="section section--projects"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <div class="grid grid--cards">
+      {% for project in projects %}
+        {% include "includes/project_card.html" %}
+      {% empty %}
+        <p class="muted">{% trans "Проекты пока не добавлены." %}</p>
+      {% endfor %}
+    </div>
+
+    {% if instance.show_all_link %}
+      <p class="section__more">
+        <a class="link-arrow" href="{% url 'portfolio:project-list' %}">{% trans "Все проекты" %}</a>
+      </p>
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,6 @@
+{% if instance.heading or instance.subheading %}
+  <header class="section__head">
+    {% if instance.heading %}<h2 class="section__title">{{ instance.heading }}</h2>{% endif %}
+    {% if instance.subheading %}<p class="section__subtitle">{{ instance.subheading }}</p>{% endif %}
+  </header>
+{% endif %}

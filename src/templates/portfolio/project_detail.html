@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n seo_tags %}
+
+{% block content %}
+  <article class="wrap section">
+    <nav class="breadcrumbs" aria-label="{% trans 'Хлебные крошки' %}">
+      <a href="{% url 'portfolio:project-list' %}">{% trans "Проекты" %}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{{ project.title }}</span>
+    </nav>
+
+    <header class="page-head">
+      <div class="card__meta">
+        <span class="pill pill--{{ project.status }}">{{ project.get_status_display }}</span>
+        {% if project.is_open_source %}<span class="pill">open source</span>{% endif %}
+        {% if project.category %}
+          <a class="pill pill--link" href="{% url 'portfolio:project-list' %}?category={{ project.category.slug }}">{{ project.category.name }}</a>
+        {% endif %}
+      </div>
+      <h1>{{ project.title }}</h1>
+      <p class="page-head__lead">{{ project.summary }}</p>
+
+      <div class="page-head__actions">
+        {% if project.repository_url %}
+          <a class="btn btn--primary" href="{{ project.repository_url }}" rel="noopener noreferrer" target="_blank">
+            {{ project.get_source_display }}
+          </a>
+        {% endif %}
+        {% if project.demo_url %}
+          <a class="btn btn--ghost" href="{{ project.demo_url }}" rel="noopener noreferrer" target="_blank">
+            {% trans "Демонстрация" %}
+          </a>
+        {% endif %}
+      </div>
+    </header>
+
+    {% if project.cover %}
+      <figure class="figure">
+        <img src="{{ project.cover.url }}" alt="{{ project.cover_alt|default:project.title }}"
+             width="1200" height="630" loading="lazy" decoding="async">
+      </figure>
+    {% endif %}
+
+    {% if project.description %}
+      <div class="prose">{{ project.description|linebreaks }}</div>
+    {% endif %}
+
+    <aside class="project-facts">
+      {% if project.technologies.all %}
+        <div>
+          <h2 class="project-facts__title">{% trans "Технологии" %}</h2>
+          <ul class="tag-list">
+            {% for tech in project.technologies.all %}<li class="tag">{{ tech.name }}</li>{% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% if project.started_on %}
+        <div>
+          <h2 class="project-facts__title">{% trans "Сроки" %}</h2>
+          <p class="muted">
+            <time datetime="{{ project.started_on|date:'Y-m-d' }}">{{ project.started_on|date:"m.Y" }}</time>
+            {% if project.finished_on %}
+              — <time datetime="{{ project.finished_on|date:'Y-m-d' }}">{{ project.finished_on|date:"m.Y" }}</time>
+            {% endif %}
+          </p>
+        </div>
+      {% endif %}
+    </aside>
+  </article>
+
+  {% if related_projects %}
+    <div class="wrap section">
+      <h2 class="section__title">{% trans "Похожие проекты" %}</h2>
+      <div class="grid grid--cards">
+        {% for project in related_projects %}{% include "includes/project_card.html" %}{% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block opengraph %}
+  {{ block.super }}
+  <meta property="og:type" content="article">
+{% endblock %}
+
+{% block structured_data %}
+  {{ block.super }}
+  {% schema_project project as project_schema %}
+  <script type="application/ld+json">{{ project_schema }}</script>
+{% endblock %}

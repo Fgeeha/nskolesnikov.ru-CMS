@@ -1,0 +1,38 @@
+{% load i18n %}
+<section class="section section--education"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <ol class="timeline">
+      {% for item in educations %}
+        <li class="timeline__item">
+          <div class="timeline__period muted">
+            <time datetime="{{ item.started_on|date:'Y' }}">{{ item.started_on|date:"Y" }}</time>
+            —
+            {% if item.finished_on %}
+              <time datetime="{{ item.finished_on|date:'Y' }}">{{ item.finished_on|date:"Y" }}</time>
+            {% else %}{% trans "настоящее время" %}{% endif %}
+          </div>
+          <h3 class="timeline__title">{{ item.program }}</h3>
+          <p class="timeline__org">{{ item.institution }}{% if item.degree %} · {{ item.degree }}{% endif %}</p>
+          {% if item.description %}<div class="timeline__text prose">{{ item.description|linebreaks }}</div>{% endif %}
+        </li>
+      {% empty %}
+        <li class="muted">{% trans "Записи об образовании пока не добавлены." %}</li>
+      {% endfor %}
+    </ol>
+
+    {% if instance.show_certificates and certificates %}
+      <h3 class="section__subtitle">{% trans "Сертификаты" %}</h3>
+      <ul class="plain-list">
+        {% for cert in certificates %}
+          <li>
+            {% if cert.url %}<a href="{{ cert.url }}" rel="noopener noreferrer" target="_blank">{{ cert.title }}</a>
+            {% else %}{{ cert.title }}{% endif %}
+            <span class="muted">— {{ cert.issuer }}, {{ cert.issued_on|date:"Y" }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>

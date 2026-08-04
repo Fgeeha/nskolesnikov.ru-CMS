@@ -1,0 +1,3 @@
+{% load seo_tags %}{% schema_person as schema %}{% if schema %}
+<script type="application/ld+json">{{ schema }}</script>
+{% endif %}

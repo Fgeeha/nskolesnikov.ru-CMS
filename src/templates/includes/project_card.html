@@ -1,0 +1,40 @@
+{% load i18n %}
+<article class="card card--project">
+  {% if project.cover %}
+    <a class="card__media" href="{{ project.get_absolute_url }}" tabindex="-1" aria-hidden="true">
+      <img src="{{ project.cover.url }}" alt="{{ project.cover_alt|default:project.title }}"
+           width="640" height="360" loading="lazy" decoding="async">
+    </a>
+  {% endif %}
+
+  <div class="card__body">
+    <div class="card__meta">
+      <span class="pill pill--{{ project.status }}">{{ project.get_status_display }}</span>
+      {% if project.is_open_source %}<span class="pill">open source</span>{% endif %}
+    </div>
+
+    <h3 class="card__title">
+      <a href="{{ project.get_absolute_url }}">{{ project.title }}</a>
+    </h3>
+    <p class="card__summary">{{ project.summary }}</p>
+
+    {% if project.technologies.all %}
+      <ul class="tag-list tag-list--compact">
+        {% for tech in project.technologies.all|slice:":6" %}<li class="tag">{{ tech.name }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <footer class="card__footer">
+    {% if project.repository_url %}
+      <a class="link-ext" href="{{ project.repository_url }}" rel="noopener noreferrer" target="_blank">
+        {{ project.get_source_display }}
+      </a>
+    {% endif %}
+    {% if project.demo_url %}
+      <a class="link-ext" href="{{ project.demo_url }}" rel="noopener noreferrer" target="_blank">
+        {% trans "Демо" %}
+      </a>
+    {% endif %}
+  </footer>
+</article>

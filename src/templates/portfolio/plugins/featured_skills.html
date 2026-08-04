@@ -1,0 +1,19 @@
+{% load i18n %}
+<section class="section section--skills-grid"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <ul class="skill-grid">
+      {% for skill in skills %}
+        <li class="skill-chip">
+          <span class="skill-chip__name">{{ skill.name }}</span>
+          {% if instance.show_level and skill.level %}
+            <span class="skill-chip__level muted">{{ skill.level }}</span>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li class="muted">{% trans "Навыки ещё не отмечены как избранные." %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

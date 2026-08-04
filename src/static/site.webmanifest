@@ -1,0 +1,16 @@
+{
+  "name": "Никита Колесников — Python / Go разработчик",
+  "short_name": "nskolesnikov",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f14",
+  "theme_color": "#0b0f14",
+  "icons": [
+    {
+      "src": "/static/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

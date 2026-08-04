@@ -1,0 +1,36 @@
+{% load i18n %}
+<section class="section section--experience"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <ol class="timeline">
+      {% for item in experiences %}
+        <li class="timeline__item">
+          <div class="timeline__period muted">
+            <time datetime="{{ item.started_on|date:'Y-m' }}">{{ item.started_on|date:"m.Y" }}</time>
+            —
+            {% if item.is_current %}
+              {% trans "настоящее время" %}
+            {% else %}
+              <time datetime="{{ item.finished_on|date:'Y-m' }}">{{ item.finished_on|date:"m.Y" }}</time>
+            {% endif %}
+          </div>
+          <h3 class="timeline__title">{{ item.position }}</h3>
+          <p class="timeline__org">
+            {% if item.organization_url %}
+              <a href="{{ item.organization_url }}" rel="noopener noreferrer" target="_blank">{{ item.organization }}</a>
+            {% else %}{{ item.organization }}{% endif %}
+          </p>
+          {% if item.description %}<div class="timeline__text prose">{{ item.description|linebreaks }}</div>{% endif %}
+          {% if instance.show_technologies and item.technologies.all %}
+            <ul class="tag-list tag-list--compact">
+              {% for tech in item.technologies.all %}<li class="tag">{{ tech.name }}</li>{% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li class="muted">{% trans "Записи об опыте пока не добавлены." %}</li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>

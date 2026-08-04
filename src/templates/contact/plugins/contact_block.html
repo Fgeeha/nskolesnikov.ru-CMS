@@ -1,0 +1,32 @@
+{% load i18n %}
+<section class="section section--contact"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% include "includes/section_head.html" %}
+
+    <div class="contact">
+      <div class="contact__info">
+        {% if instance.text %}<p>{{ instance.text }}</p>{% endif %}
+
+        {% if instance.show_email and profile.public_email %}
+          <p class="contact__email">
+            <a href="mailto:{{ profile.public_email }}">{{ profile.public_email }}</a>
+          </p>
+        {% endif %}
+
+        {% if instance.show_social and links %}
+          <ul class="social social--icons">
+            {% for link in links %}
+              <li><a class="social__link" href="{{ link.url }}" rel="me noopener noreferrer" target="_blank">{{ link.name }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {% if form %}
+        <div class="contact__form">
+          {% include "includes/contact_form.html" %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

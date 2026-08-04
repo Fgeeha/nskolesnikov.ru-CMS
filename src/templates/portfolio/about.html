@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="wrap section">
+    <header class="page-head">
+      <h1>{% trans "Обо мне" %}</h1>
+      {% if profile.headline %}<p class="page-head__lead">{{ profile.headline }}</p>{% endif %}
+    </header>
+
+    <div class="about about--page">
+      {% if profile.avatar %}
+        <figure class="about__figure">
+          <img src="{{ profile.avatar.url }}" alt="{{ profile.full_name }}"
+               width="320" height="320" loading="lazy" decoding="async">
+        </figure>
+      {% endif %}
+      <div class="about__body prose">
+        {{ profile.biography|default:profile.summary|linebreaks }}
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap section">
+    <h2 class="section__title">{% trans "Технологии" %}</h2>
+    <div class="skill-groups">
+      {% for category in skill_categories %}
+        <article class="skill-group">
+          <h3 class="skill-group__title">{{ category.name }}</h3>
+          <ul class="tag-list">
+            {% for skill in category.skills.all %}
+              <li class="tag">{{ skill.name }}{% if skill.level %} <span class="muted">· {{ skill.level }}</span>{% endif %}</li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% empty %}
+        <p class="muted">{% trans "Навыки пока не добавлены." %}</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

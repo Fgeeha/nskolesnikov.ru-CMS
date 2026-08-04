@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="wrap section">
+    <header class="page-head">
+      <h1>{{ page_title }}</h1>
+      <p class="page-head__lead">{{ meta_description }}</p>
+    </header>
+
+    {% if categories %}
+      <nav class="filters" aria-label="{% trans 'Фильтр по категориям' %}">
+        <a class="filters__item{% if not active_category %} is-active{% endif %}"
+           href="{% url 'blog:article-list' %}">{% trans "Все" %}</a>
+        {% for category in categories %}
+          <a class="filters__item{% if active_category.pk == category.pk %} is-active{% endif %}"
+             href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+
+    <div class="grid grid--cards">
+      {% for article in articles %}
+        {% include "includes/article_card.html" %}
+      {% empty %}
+        <p class="muted">{% trans "Статей пока нет." %}</p>
+      {% endfor %}
+    </div>
+
+    {% include "includes/pagination.html" %}
+  </div>
+{% endblock %}

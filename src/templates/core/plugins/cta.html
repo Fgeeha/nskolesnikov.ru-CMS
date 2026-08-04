@@ -1,0 +1,15 @@
+<section class="section section--cta"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap cta">
+    <div class="cta__text">
+      {% if instance.heading %}<h2 class="cta__title">{{ instance.heading }}</h2>{% endif %}
+      {% if instance.subheading %}<p class="cta__subtitle">{{ instance.subheading }}</p>{% endif %}
+      {% if instance.text %}<p>{{ instance.text }}</p>{% endif %}
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--primary" href="{{ instance.button_url }}">{{ instance.button_label }}</a>
+      {% if instance.secondary_label and instance.secondary_url %}
+        <a class="btn btn--ghost" href="{{ instance.secondary_url }}">{{ instance.secondary_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
