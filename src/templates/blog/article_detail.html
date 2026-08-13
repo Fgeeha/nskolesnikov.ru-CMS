@@ -64,4 +64,7 @@
   {{ block.super }}
   {% schema_article article as article_schema %}
   <script type="application/ld+json">{{ article_schema }}</script>
+  {% url 'blog:article-list' as article_list_url %}
+  {% schema_breadcrumbs "Статьи" article_list_url article.title None as breadcrumbs_schema %}
+  <script type="application/ld+json">{{ breadcrumbs_schema }}</script>
 {% endblock %}

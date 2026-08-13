@@ -126,6 +126,17 @@ class TestSeoMarkup:
     def test_article_page_embeds_blogposting(self, client, content, article):
         assert "BlogPosting" in client.get(article.get_absolute_url()).content.decode()
 
+    def test_article_page_embeds_breadcrumb_list(self, client, content, article):
+        body = client.get(article.get_absolute_url()).content.decode()
+        assert "BreadcrumbList" in body
+        assert f'"name": "{article.title}"' in body
+        assert f'"item": "https://testserver{article.get_absolute_url()}"' in body
+
+    def test_project_page_embeds_breadcrumb_list(self, client, content, project):
+        body = client.get(project.get_absolute_url()).content.decode()
+        assert "BreadcrumbList" in body
+        assert f'"name": "{project.title}"' in body
+
 
 class TestErrorPages:
     def test_unknown_url_returns_404(self, client, content):

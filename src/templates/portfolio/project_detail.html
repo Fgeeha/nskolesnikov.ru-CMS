@@ -87,4 +87,7 @@
   {{ block.super }}
   {% schema_project project as project_schema %}
   <script type="application/ld+json">{{ project_schema }}</script>
+  {% url 'portfolio:project-list' as project_list_url %}
+  {% schema_breadcrumbs "Проекты" project_list_url project.title None as breadcrumbs_schema %}
+  <script type="application/ld+json">{{ breadcrumbs_schema }}</script>
 {% endblock %}

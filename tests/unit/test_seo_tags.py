@@ -28,6 +28,16 @@ def test_page_description_falls_back_to_default(site_settings):
     assert out == "Описание по умолчанию"
 
 
+def test_page_description_truncates_long_text_at_word_boundary(site_settings):
+    long_excerpt = "слово " * 40  # 240 chars, well past the 160-char cap
+    out = render(
+        "{% page_description %}", meta_description=long_excerpt, site_settings=site_settings
+    )
+    assert len(out) <= 160
+    assert out.endswith("…")
+    assert not out.endswith(" …")
+
+
 def test_absolute_url_leaves_external_links_untouched():
     assert absolute_url("https://example.com/x") == "https://example.com/x"
 
@@ -70,3 +80,17 @@ def test_schema_project_reports_repository(project):
     data = json.loads(render("{% schema_project project %}", project=project))
     assert data["@type"] == "SoftwareSourceCode"
     assert data["codeRepository"] == project.repository_url
+
+
+def test_schema_breadcrumbs_lists_items_in_order():
+    out = render("{% schema_breadcrumbs 'Статьи' '/blog/' 'Заголовок' '/blog/slug/' %}")
+    data = json.loads(out)
+    assert data["@type"] == "BreadcrumbList"
+    assert [item["position"] for item in data["itemListElement"]] == [1, 2]
+    assert data["itemListElement"][0] == {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Статьи",
+        "item": "https://testserver/blog/",
+    }
+    assert data["itemListElement"][1]["item"] == "https://testserver/blog/slug/"

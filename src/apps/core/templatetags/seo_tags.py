@@ -6,8 +6,13 @@ from typing import Any
 from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
+from django.utils.text import Truncator
 
 register = template.Library()
+
+# Google truncates meta descriptions around this length; longer fallbacks
+# (e.g. a full article excerpt) get cut at a word boundary instead.
+META_DESCRIPTION_MAX_LENGTH = 160
 
 
 def _settings_obj(context: template.Context) -> Any:
@@ -32,15 +37,23 @@ def page_title(context: template.Context) -> str:
 
 @register.simple_tag(takes_context=True)
 def page_description(context: template.Context) -> str:
-    """Meta description: view value, then CMS page description, then default."""
+    """Meta description: view value, then CMS page description, then default.
+
+    Truncated at a word boundary — sources like an article excerpt can run
+    well past what search engines display.
+    """
     explicit = context.get("meta_description")
     if not explicit:
         cms_page = context.get("current_page")
         explicit = getattr(cms_page, "get_meta_description", lambda: "")() if cms_page else ""
     if explicit:
-        return str(explicit)
-    site = _settings_obj(context)
-    return getattr(site, "default_seo_description", "") or getattr(site, "tagline", "") or ""
+        description = str(explicit)
+    else:
+        site = _settings_obj(context)
+        description = (
+            getattr(site, "default_seo_description", "") or getattr(site, "tagline", "") or ""
+        )
+    return Truncator(description).chars(META_DESCRIPTION_MAX_LENGTH, truncate="…")
 
 
 @register.simple_tag(takes_context=True)
@@ -67,6 +80,22 @@ def _json_ld(data: dict[str, Any]) -> str:
     payload = json.dumps(data, ensure_ascii=False)
     # Prevent an early </script> from breaking out of the tag.
     return mark_safe(payload.replace("<", "\\u003c"))  # noqa: S308 - escaped above
+
+
+@register.simple_tag(takes_context=True)
+def schema_breadcrumbs(context: template.Context, *crumbs: Any) -> str:
+    """Schema.org BreadcrumbList from alternating (name, path) pairs.
+
+    A ``path`` of ``None`` resolves to the current page, mirroring the
+    ``<span aria-current="page">`` entry in the visible breadcrumb nav.
+    """
+    items = []
+    for position, (name, path) in enumerate(zip(crumbs[0::2], crumbs[1::2], strict=True), start=1):
+        url = canonical_url(context) if path is None else absolute_url(path)
+        items.append({"@type": "ListItem", "position": position, "name": str(name), "item": url})
+    return _json_ld(
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
+    )
 
 
 @register.simple_tag(takes_context=True)
