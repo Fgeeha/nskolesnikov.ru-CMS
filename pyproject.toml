@@ -81,7 +81,7 @@ disallow_untyped_defs = false
 exclude = ["migrations/"]
 
 [[tool.mypy.overrides]]
-module = ["cms.*", "filer.*", "environ.*"]
+module = ["cms.*", "filer.*", "environ.*", "djangocms_text.*"]
 ignore_missing_imports = true
 
 [tool.django-stubs]

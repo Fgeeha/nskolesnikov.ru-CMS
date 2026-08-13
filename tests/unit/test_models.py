@@ -115,6 +115,17 @@ class TestArticleQuerySet:
         article.reading_time = 9
         assert article.estimated_reading_time == 9
 
+    def test_reading_time_ignores_html_markup(self):
+        # 269 real words rounds down to 1 minute; if block tags on their own
+        # lines were counted as extra words (no strip_tags), it rounds up to 2.
+        marked_up = Article.objects.create(
+            title="С разметкой",
+            slug="marked-up",
+            excerpt="e",
+            body="<p>\n" + "слово " * 269 + "\n</p>",
+        )
+        assert marked_up.estimated_reading_time == 1
+
     def test_absolute_url_uses_slug(self, article):
         assert article.get_absolute_url() == f"/blog/{article.slug}/"
 

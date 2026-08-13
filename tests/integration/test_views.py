@@ -83,6 +83,29 @@ class TestBlogViews:
         assert client.get("/blog/category/nope/").status_code == 404
 
 
+class TestBlogFeed:
+    def test_feed_lists_published_articles(self, client, content, article):
+        response = client.get(reverse("blog:feed"))
+        assert response.status_code == 200
+        assert response["Content-Type"].startswith("application/rss+xml")
+        body = response.content.decode()
+        assert article.title in body
+        assert f"https://testserver{article.get_absolute_url()}" in body
+
+    def test_feed_self_link_uses_site_url_not_sites_framework(self, client, content, article):
+        # Regression: Django's default feed_url falls back to the unused
+        # django.contrib.sites domain (example.com) instead of SITE_URL.
+        body = client.get(reverse("blog:feed")).content.decode()
+        assert 'href="https://testserver/blog/feed/" rel="self"' in body
+        assert "example.com" not in body
+
+    def test_feed_excludes_drafts_and_future_articles(
+        self, client, content, article, draft_article
+    ):
+        body = client.get(reverse("blog:feed")).content.decode()
+        assert draft_article.title not in body
+
+
 class TestSeoMarkup:
     def test_canonical_and_description_present(self, client, content, project):
         body = client.get(project.get_absolute_url()).content.decode()

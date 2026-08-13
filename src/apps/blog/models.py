@@ -3,7 +3,9 @@
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
+from djangocms_text.fields import HTMLField
 
 from apps.core.models import OrderedModel, SectionPluginBase, SeoModel, TimeStampedModel
 
@@ -63,7 +65,7 @@ class Article(SeoModel, TimeStampedModel):
     title = models.CharField(_("заголовок"), max_length=200)
     slug = models.SlugField(_("slug"), max_length=200, unique=True)
     excerpt = models.TextField(_("превью"), max_length=400)
-    body = models.TextField(_("текст статьи"))
+    body = HTMLField(_("текст статьи"))
     cover = models.ImageField(_("обложка"), upload_to="articles/", blank=True)
     cover_alt = models.CharField(_("alt-текст обложки"), max_length=160, blank=True)
     category = models.ForeignKey(
@@ -118,7 +120,7 @@ class Article(SeoModel, TimeStampedModel):
         """Reading time in minutes; the stored value wins when set."""
         if self.reading_time:
             return self.reading_time
-        words = len(self.body.split())
+        words = len(strip_tags(self.body).split())
         return max(1, round(words / 180))
 
 

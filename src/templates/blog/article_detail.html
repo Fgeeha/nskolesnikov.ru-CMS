@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n seo_tags %}
 
+{% block extra_head %}
+  <link rel="alternate" type="application/rss+xml" title="{% trans 'RSS-лента статей' %}" href="{% url 'blog:feed' %}">
+{% endblock %}
+
 {% block content %}
   <article class="wrap section article">
     <nav class="breadcrumbs" aria-label="{% trans 'Хлебные крошки' %}">
@@ -29,7 +33,7 @@
       </figure>
     {% endif %}
 
-    <div class="prose">{{ article.body|linebreaks }}</div>
+    <div class="prose">{{ article.body }}</div>
 
     {% if article.tags.all %}
       <ul class="tag-list tag-list--compact">
