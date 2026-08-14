@@ -1,5 +1,9 @@
 # nskolesnikov.ru
 
+<p align="center">
+  <img src="assets/readme/hero.svg" alt="nskolesnikov.ru — сайт-портфолио на Django и django CMS" width="100%">
+</p>
+
 Персональный сайт-портфолио Python-разработчика на Django и django CMS.
 
 Сайт представляет разработчика и его специализацию, показывает стек технологий,
@@ -9,6 +13,7 @@
 
 ## Содержание
 
+- [Скриншоты](#скриншоты)
 - [Стек](#стек)
 - [Структура репозитория](#структура-репозитория)
 - [Требования](#требования)
@@ -22,6 +27,27 @@
 - [Обновление зависимостей](#обновление-зависимостей)
 - [Типичные проблемы](#типичные-проблемы)
 - [Документация](#документация)
+
+## Скриншоты
+
+<table>
+<tr>
+<td><img src="assets/readme/source/home-dark.png" alt="Главная страница, тёмная тема" width="420"></td>
+<td><img src="assets/readme/source/home-light.png" alt="Главная страница, светлая тема" width="420"></td>
+</tr>
+<tr>
+<td><img src="assets/readme/source/projects-dark.png" alt="Каталог проектов" width="420"></td>
+<td><img src="assets/readme/source/project-dark.png" alt="Страница проекта" width="420"></td>
+</tr>
+<tr>
+<td><img src="assets/readme/source/blog-dark.png" alt="Блог" width="420"></td>
+<td><img src="assets/readme/source/tools-dark.png" alt="Каталог мини-инструментов" width="420"></td>
+</tr>
+<tr>
+<td><img src="assets/readme/source/contacts-dark.png" alt="Контактная форма" width="420"></td>
+<td><img src="assets/readme/source/mobile-dark.png" alt="Мобильная версия" width="210"></td>
+</tr>
+</table>
 
 ## Стек
 
