@@ -33,3 +33,11 @@ backups/
 .idea/
 .vscode/
 .DS_Store
+
+# Local AI assistant tooling (not part of the project)
+.claude/
+.agents/
+.claude-flow/
+.mcp.json
+.env.local
+.env.*.local
