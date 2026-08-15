@@ -226,13 +226,13 @@ make check             # django check
 make cms-check         # django CMS check
 make verify            # все проверки подряд
 
-make compose-up        # dev-стек в Docker
-make compose-down      # остановить dev-стек
-make compose-logs      # логи приложения
+make up-local          # dev-стек в Docker
+make down-local        # остановить dev-стек
+make logs              # логи приложения
 
-make prod-up           # production-стек
-make prod-down         # остановить production-стек
-make prod-logs         # логи production
+make up-prod           # production-стек
+make down-prod         # остановить production-стек
+make logs-prod         # логи production
 ```
 
 ## Проверки качества
