@@ -44,6 +44,26 @@ def robots_txt(request: HttpRequest) -> HttpResponse:
     return HttpResponse("\n".join(lines) + "\n", content_type="text/plain; charset=utf-8")
 
 
+def privacy_policy(request: HttpRequest) -> HttpResponse:
+    """Personal data processing policy (152-ФЗ)."""
+    context = {
+        "page_title": "Политика обработки персональных данных",
+        "meta_description": (
+            "Политика обработки персональных данных оператора персональных данных."
+        ),
+    }
+    return render(request, "core/privacy.html", context)
+
+
+def cookie_policy(request: HttpRequest) -> HttpResponse:
+    """Cookie usage policy."""
+    context = {
+        "page_title": "Политика использования cookie",
+        "meta_description": "Как сайт использует файлы cookie и как их отключить.",
+    }
+    return render(request, "core/cookies.html", context)
+
+
 def page_not_found(request: HttpRequest, exception: Exception) -> HttpResponse:
     return render(request, "404.html", status=404)
 

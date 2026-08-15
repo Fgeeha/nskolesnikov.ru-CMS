@@ -11,6 +11,7 @@ class ContactMessage(TimeStampedModel):
     email = models.EmailField(_("email"))
     subject = models.CharField(_("тема"), max_length=160, blank=True)
     message = models.TextField(_("сообщение"), max_length=4000)
+    consent = models.BooleanField(_("согласие на обработку персональных данных"), default=False)
     is_processed = models.BooleanField(_("обработано"), default=False, db_index=True)
     # Kept for abuse handling only; never rendered in list views.
     remote_addr = models.GenericIPAddressField(_("IP-адрес"), null=True, blank=True)

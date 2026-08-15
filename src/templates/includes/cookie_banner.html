@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="cookie-banner" data-cookie-banner hidden>
+  <div class="wrap cookie-banner__inner">
+    <p class="cookie-banner__text">
+      {% blocktrans %}
+      Сайт использует файлы cookie, чтобы запоминать настройки оформления.
+      Продолжая пользоваться сайтом, вы соглашаетесь с
+      {% endblocktrans %}
+      <a href="{% url 'core:cookies' %}">{% trans "политикой использования cookie" %}</a>.
+    </p>
+    <button class="btn btn--primary cookie-banner__accept" type="button" data-cookie-accept>
+      {% trans "Принять" %}
+    </button>
+  </div>
+</div>

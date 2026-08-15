@@ -15,6 +15,7 @@ PAYLOAD = {
     "subject": "Сотрудничество",
     "message": "Здравствуйте, хочу обсудить проект.",
     "website": "",
+    "consent": "on",
 }
 
 
@@ -42,6 +43,13 @@ def test_valid_post_stores_message_and_redirects(client, content):
     assert message.name == "Иван"
     assert message.email == "ivan@example.com"
     assert message.is_processed is False
+    assert message.consent is True
+
+
+def test_missing_consent_is_rejected_without_storing(client, content):
+    response = client.post(url(), PAYLOAD | {"consent": ""})
+    assert response.status_code == 200
+    assert ContactMessage.objects.count() == 0
 
 
 def test_notification_email_is_sent_without_message_body(client, content):

@@ -3,6 +3,8 @@
 from typing import Any
 
 from django import forms
+from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from apps.contact.models import ContactMessage
@@ -23,6 +25,29 @@ class ContactForm(forms.ModelForm):
             attrs={"autocomplete": "off", "tabindex": "-1", "aria-hidden": "true"}
         ),
     )
+    # Not a model form field: kept declared explicitly so it is always
+    # required regardless of the underlying BooleanField's default, and so
+    # the link target is resolved at request time, not at import time.
+    consent = forms.BooleanField(
+        required=True,
+        label=_("Даю согласие на обработку персональных данных"),
+        error_messages={"required": _("Необходимо согласие на обработку персональных данных.")},
+    )
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields["consent"].help_text = format_html(
+            'Ознакомьтесь с <a href="{}" target="_blank" rel="noopener noreferrer">'
+            "политикой обработки персональных данных</a>.",
+            reverse("core:privacy"),
+        )
+
+    def save(self, commit: bool = True) -> ContactMessage:
+        instance: ContactMessage = super().save(commit=False)
+        instance.consent = self.cleaned_data["consent"]
+        if commit:
+            instance.save()
+        return instance
 
     class Meta:
         model = ContactMessage

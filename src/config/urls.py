@@ -37,6 +37,7 @@ urlpatterns += i18n_patterns(
     path("", include("apps.portfolio.urls", namespace="portfolio")),
     path("blog/", include("apps.blog.urls", namespace="blog")),
     path("contacts/", include("apps.contact.urls", namespace="contact")),
+    path("", include("apps.core.urls", namespace="core")),
     path("", include("cms.urls")),
     prefix_default_language=False,
 )

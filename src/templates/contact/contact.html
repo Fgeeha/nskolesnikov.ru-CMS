@@ -13,6 +13,9 @@
         {% if profile.public_email %}
           <p class="contact__email"><a href="mailto:{{ profile.public_email }}">{{ profile.public_email }}</a></p>
         {% endif %}
+        {% if profile.phone %}
+          <p class="contact__phone"><a href="tel:{{ profile.phone|cut:' ' }}">{{ profile.phone }}</a></p>
+        {% endif %}
         {% if social_links %}
           <ul class="social social--cards">
             {% for link in social_links %}

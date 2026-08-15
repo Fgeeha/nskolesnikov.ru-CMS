@@ -138,6 +138,30 @@ class TestSeoMarkup:
         assert f'"name": "{project.title}"' in body
 
 
+class TestLegalPages:
+    def test_privacy_policy_renders(self, client, content):
+        response = client.get(reverse("core:privacy"))
+        assert response.status_code == 200
+        assert "152-ФЗ" in response.content.decode()
+
+    def test_cookie_policy_renders(self, client, content):
+        response = client.get(reverse("core:cookies"))
+        assert response.status_code == 200
+
+    def test_footer_links_to_legal_pages(self, client, content):
+        body = client.get(reverse("portfolio:about")).content.decode()
+        assert reverse("core:privacy") in body
+        assert reverse("core:cookies") in body
+
+    def test_cookie_banner_is_present_on_every_page(self, client, content):
+        body = client.get(reverse("portfolio:about")).content.decode()
+        assert "data-cookie-banner" in body
+
+    def test_header_shows_phone_when_set(self, client, content):
+        body = client.get(reverse("portfolio:about")).content.decode()
+        assert "tel:+7900000-00-00" in body
+
+
 class TestErrorPages:
     def test_unknown_url_returns_404(self, client, content):
         response = client.get("/definitely-missing/")

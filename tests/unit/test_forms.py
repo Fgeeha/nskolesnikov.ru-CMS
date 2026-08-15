@@ -11,6 +11,7 @@ VALID = {
     "email": "ivan@example.com",
     "subject": "Вопрос по проекту",
     "message": "Здравствуйте, хочу обсудить сотрудничество.",
+    "consent": "on",
 }
 
 
@@ -55,4 +56,22 @@ def test_values_are_stripped():
 
 def test_form_exposes_only_public_fields():
     # remote_addr / user_agent must never be settable by the client.
-    assert set(ContactForm().fields) == {"website", "name", "email", "subject", "message"}
+    assert set(ContactForm().fields) == {
+        "website",
+        "name",
+        "email",
+        "subject",
+        "message",
+        "consent",
+    }
+
+
+def test_consent_is_required():
+    form = ContactForm(data=VALID | {"consent": ""})
+    assert not form.is_valid()
+    assert "consent" in form.errors
+
+
+def test_consent_help_text_links_to_privacy_policy():
+    form = ContactForm()
+    assert 'href="/privacy/"' in form.fields["consent"].help_text

@@ -55,6 +55,7 @@ def profile(db) -> DeveloperProfile:
         biography="Расширенное описание профиля.",
         location="Россия",
         public_email="test@example.com",
+        phone="+7 900 000-00-00",
     )
 
 

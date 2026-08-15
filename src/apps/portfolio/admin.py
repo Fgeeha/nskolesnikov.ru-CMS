@@ -24,7 +24,7 @@ class DeveloperProfileAdmin(admin.ModelAdmin):
         (None, {"fields": ("full_name", "nickname", "headline", "avatar", "location")}),
         ("Тексты", {"fields": ("summary", "biography")}),
         ("Доступность", {"fields": ("is_available", "availability_note")}),
-        ("Ссылки", {"fields": ("public_email", "resume_url", "cta_text", "cta_url")}),
+        ("Ссылки", {"fields": ("public_email", "phone", "resume_url", "cta_text", "cta_url")}),
         ("Служебное", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )
 

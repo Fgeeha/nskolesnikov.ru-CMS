@@ -6,6 +6,10 @@
       <span class="brand__name">{{ profile.nickname|default:site_settings.site_name }}</span>
     </a>
 
+    {% if profile.phone %}
+      <a class="site-header__phone" href="tel:{{ profile.phone|cut:' ' }}">{{ profile.phone }}</a>
+    {% endif %}
+
     <button class="nav-toggle" type="button"
             aria-expanded="false" aria-controls="primary-nav"
             aria-label="{% trans 'Открыть меню' %}">

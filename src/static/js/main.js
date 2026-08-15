@@ -72,4 +72,32 @@
       }
     });
   }
+
+  /* --- Cookie consent banner --------------------------------------------- */
+  var banner = document.querySelector('[data-cookie-banner]');
+  if (banner) {
+    var CONSENT_KEY = 'cookie_consent';
+    var accepted = false;
+    try {
+      accepted = localStorage.getItem(CONSENT_KEY) === 'accepted';
+    } catch (e) {
+      accepted = false;
+    }
+
+    if (!accepted) {
+      banner.hidden = false;
+    }
+
+    var acceptButton = banner.querySelector('[data-cookie-accept]');
+    if (acceptButton) {
+      acceptButton.addEventListener('click', function () {
+        banner.hidden = true;
+        try {
+          localStorage.setItem(CONSENT_KEY, 'accepted');
+        } catch (e) {
+          /* Storage can be blocked; the banner still closes for this visit. */
+        }
+      });
+    }
+  }
 })();

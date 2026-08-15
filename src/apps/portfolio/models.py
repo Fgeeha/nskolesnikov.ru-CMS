@@ -35,6 +35,7 @@ class DeveloperProfile(TimeStampedModel):
     availability_note = models.CharField(_("комментарий о доступности"), max_length=160, blank=True)
     resume_url = models.URLField(_("ссылка на резюме"), blank=True)
     public_email = models.EmailField(_("публичный email"), blank=True)
+    phone = models.CharField(_("телефон"), max_length=32, blank=True)
     cta_text = models.CharField(_("текст призыва к действию"), max_length=120, blank=True)
     cta_url = models.CharField(_("ссылка призыва к действию"), max_length=200, blank=True)
 

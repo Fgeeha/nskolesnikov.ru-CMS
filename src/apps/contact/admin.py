@@ -16,6 +16,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
         "email",
         "subject",
         "message",
+        "consent",
         "remote_addr",
         "user_agent",
         "created_at",
@@ -24,7 +25,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
     date_hierarchy = "created_at"
     actions = ("mark_processed",)
     fieldsets = (
-        (None, {"fields": ("name", "email", "subject", "message")}),
+        (None, {"fields": ("name", "email", "subject", "message", "consent")}),
         ("Обработка", {"fields": ("is_processed",)}),
         (
             "Служебное",

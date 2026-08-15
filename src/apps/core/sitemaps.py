@@ -24,6 +24,8 @@ class StaticViewSitemap(Sitemap):
             "portfolio:resume",
             "blog:article-list",
             "contact:contact",
+            "core:privacy",
+            "core:cookies",
         ]
 
     def location(self, item: str) -> str:
